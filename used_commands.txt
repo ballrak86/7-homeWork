@@ -1,0 +1,28 @@
+2. Установить систему с LVM, после чего переименовать VG
+lvdisplay
+vgs
+vgdisplay
+lsblk
+reboot
+reboot
+lsblk
+vi /etc/default/grub
+grub2-mkconfig -o /etc/grub2.cfg
+grep alex /etc/grub2.cfg
+reboot
+lsblk
+
+-------------------------------------------------------------------------------------------------------
+3. Добавить модуль в initrd
+mkdir  /usr/lib/dracut/modules.d/01test
+yum -y -q install nano
+nano  /usr/lib/dracut/modules.d/01test/module-setup.sh
+nano  /usr/lib/dracut/modules.d/01test/module-setup.sh
+nano  /usr/lib/dracut/modules.d/01test/test.sh
+chmod +x /usr/lib/dracut/modules.d/01test/*
+ll /usr/lib/dracut/modules.d/01test/*
+mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
+lsinitrd -m /boot/initramfs-3.10.0-1127.el7.x86_64.img | grep test
+nano /etc/default/grub
+grub2-mkconfig -o /etc/grub2.cfg
+reboot

@@ -1,0 +1,5 @@
+Использование LVM при установке ОС
+https://www.golinuxcloud.com/create-lvm-during-installation-rhel-centos-8/
+
+Смена режима работы с lvm на rw
+http://naveen161089.blogspot.com/2014/03/read-only-locking-type-set-write-locks.html

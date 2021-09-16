@@ -1,0 +1,13 @@
+Ошибки которые встретились при выполнении ДЗ
+------------------------------------------------------------
+1)В emergency mode заблокировано изменение lvm
+switc_root:/# lvm vgrename centos alex
+vgrename read-only locking type set write locks are prohibited
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Отключил ее в файле /etc/lvm/lvm.conf
+switc_root:/# grep 'locking_type =' /etc/lvm/lvm.conf
+         locking_type = 4
+switc_root:/# vi /etc/lvm/lvm.conf
+switc_root:/# grep 'locking_type =' /etc/lvm/lvm.conf
+         locking_type = 1

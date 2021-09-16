@@ -1,0 +1,327 @@
+2. Установить систему с LVM, после чего переименовать VG
+
+root@otssTestServer:/home/lx/git/testLVM# vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'alenchik/centOsLVM' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: 1.0
+==> default: Loading metadata for box 'alenchik/centOsLVM'
+    default: URL: https://vagrantcloud.com/alenchik/centOsLVM
+==> default: Adding box 'alenchik/centOsLVM' (v1.0) for provider: virtualbox
+    default: Downloading: https://vagrantcloud.com/alenchik/boxes/centOsLVM/versions/1.0/providers/virtualbox.box
+    default: Download redirected to host: vagrantcloud-files-production.s3-accelerate.amazonaws.com
+==> default: Successfully added box 'alenchik/centOsLVM' (v1.0) for 'virtualbox'!
+==> default: Importing base box 'alenchik/centOsLVM'...
+==> default: Matching MAC address for NAT networking...
+==> default: Checking if box 'alenchik/centOsLVM' version '1.0' is up to date...
+==> default: Setting the name of the VM: testLVM_default_1631770495913_80985
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 22 (guest) => 2222 (host) (adapter 1)
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+^C==> default: Waiting for cleanup before exiting...
+Vagrant exited after cleanup due to external interrupt.
+root@otssTestServer:/home/lx/git/testLVM# nano Vagrant
+root@otssTestServer:/home/lx/git/testLVM# nano Vagrantfile
+root@otssTestServer:/home/lx/git/testLVM# vagrant ssh
+==> default: The machine you're attempting to SSH into is configured to use
+==> default: password-based authentication. Vagrant can't script entering the
+==> default: password for you. If you're prompted for a password, please enter
+==> default: the same password you have configured in the Vagrantfile.
+root@127.0.0.1's password:
+Last login: Thu Sep 16 10:36:11 2021
+[root@vm-gkuOA1801016 ~]# lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/centos/root
+  LV Name                root
+  VG Name                centos
+  LV UUID                7yDaPO-YAEq-arBI-QQAO-NNJy-JjmT-bEYf2s
+  LV Write Access        read/write
+  LV Creation host, time vm-gkuOA1801016.kontur, 2021-09-15 16:46:02 +0500
+  LV Status              available
+  # open                 1
+  LV Size                8,50 GiB
+  Current LE             2177
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+
+  --- Logical volume ---
+  LV Path                /dev/centos/swap
+  LV Name                swap
+  VG Name                centos
+  LV UUID                GREYOn-oCyH-CLO2-TKg6-uSvu-y0Po-XDbV7G
+  LV Write Access        read/write
+  LV Creation host, time vm-gkuOA1801016.kontur, 2021-09-15 16:46:04 +0500
+  LV Status              available
+  # open                 2
+  LV Size                1,00 GiB
+  Current LE             256
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+
+[root@vm-gkuOA1801016 ~]# vgs
+  VG     #PV #LV #SN Attr   VSize VFree
+  centos   1   2   0 wz--n- 9,50g    0
+[root@vm-gkuOA1801016 ~]# vgdisplay
+  --- Volume group ---
+  VG Name               centos
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               9,50 GiB
+  PE Size               4,00 MiB
+  Total PE              2433
+  Alloc PE / Size       2433 / 9,50 GiB
+  Free  PE / Size       0 / 0
+  VG UUID               5mZFws-AWyZ-ARf8-JSS0-JfWu-ECes-1C2aT7
+
+[root@vm-gkuOA1801016 ~]# lsblk
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   10G  0 disk
+├─sda1            8:1    0  500M  0 part /boot
+└─sda2            8:2    0  9,5G  0 part
+  ├─centos-root 253:0    0  8,5G  0 lvm  /
+  └─centos-swap 253:1    0    1G  0 lvm  [SWAP]
+sr0              11:0    1 1024M  0 rom
+[root@vm-gkuOA1801016 ~]# reboot
+Connection to 127.0.0.1 closed by remote host.
+Connection to 127.0.0.1 closed.
+root@otssTestServer:/home/lx/git/testLVM# vagrant destroy
+    default: Are you sure you want to destroy the 'default' VM? [y/N] y
+==> default: Forcing shutdown of VM...
+==> default: Destroying VM and associated drives...
+root@otssTestServer:/home/lx/git/testLVM# vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Importing base box 'alenchik/centOsLVM'...
+==> default: Matching MAC address for NAT networking...
+==> default: Checking if box 'alenchik/centOsLVM' version '1.0' is up to date...
+==> default: Setting the name of the VM: testLVM_default_1631772335730_8906
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 22 (guest) => 2222 (host) (adapter 1)
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: root
+    default: SSH auth method: password
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+    default: No guest additions were detected on the base box for this VM! Guest
+    default: additions are required for forwarded ports, shared folders, host only
+    default: networking, and more. If SSH fails on this machine, please install
+    default: the guest additions and repackage the box to continue.
+    default:
+    default: This is not an error message; everything may continue to work properly,
+    default: in which case you may ignore this message.
+==> default: Mounting shared folders...
+    default: /vagrant => /home/lx/git/testLVM
+Vagrant was unable to mount VirtualBox shared folders. This is usually
+because the filesystem "vboxsf" is not available. This filesystem is
+made available via the VirtualBox Guest Additions and kernel module.
+Please verify that these guest additions are properly installed in the
+guest. This is not a bug in Vagrant and is usually caused by a faulty
+Vagrant box. For context, the command attempted was:
+
+mount -t vboxsf -o uid=0,gid=0 vagrant /vagrant
+
+The error output from the command was:
+
+mount: unknown filesystem type 'vboxsf'
+
+root@otssTestServer:/home/lx/git/testLVM# vagrant ssh
+==> default: The machine you're attempting to SSH into is configured to use
+==> default: password-based authentication. Vagrant can't script entering the
+==> default: password for you. If you're prompted for a password, please enter
+==> default: the same password you have configured in the Vagrantfile.
+root@127.0.0.1's password:
+Last login: Wed Sep 15 17:30:20 2021
+[root@vm-gkuOA1801016 ~]# reboot
+Connection to 127.0.0.1 closed by remote host.
+Connection to 127.0.0.1 closed.
+root@otssTestServer:/home/lx/git/testLVM# vagrant ssh
+==> default: The machine you're attempting to SSH into is configured to use
+==> default: password-based authentication. Vagrant can't script entering the
+==> default: password for you. If you're prompted for a password, please enter
+==> default: the same password you have configured in the Vagrantfile.
+root@127.0.0.1's password:
+Last login: Thu Sep 16 11:07:06 2021 from gateway
+[root@vm-gkuOA1801016 ~]# lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda             8:0    0   10G  0 disk
+├─sda1          8:1    0  500M  0 part /boot
+└─sda2          8:2    0  9,5G  0 part
+  ├─alex-root 253:0    0  8,5G  0 lvm  /
+  └─alex-swap 253:1    0    1G  0 lvm  [SWAP]
+sr0            11:0    1 1024M  0 rom
+[root@vm-gkuOA1801016 ~]# vi /etc/default/grub
+[root@vm-gkuOA1801016 ~]# grub2-mkconfig -o /etc/grub2.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-1160.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-1160.el7.x86_64.img
+Found linux image: /boot/vmlinuz-0-rescue-bba117eb1ebb45aaae14b7eb31dea8d9
+Found initrd image: /boot/initramfs-0-rescue-bba117eb1ebb45aaae14b7eb31dea8d9.img
+done
+[root@vm-gkuOA1801016 ~]# grep alex /etc/grub2.cfg
+        linux16 /vmlinuz-3.10.0-1160.el7.x86_64 root=/dev/mapper/alex-root ro crashkernel=auto rd.lvm.lv=alex/root rd.lvm.lv=alex/swap rhgb quiet
+        linux16 /vmlinuz-0-rescue-bba117eb1ebb45aaae14b7eb31dea8d9 root=/dev/mapper/alex-root ro crashkernel=auto rd.lvm.lv=alex/root rd.lvm.lv=alex/swap rhgb quiet
+[root@vm-gkuOA1801016 ~]# reboot
+Connection to 127.0.0.1 closed by remote host.
+Connection to 127.0.0.1 closed.
+root@otssTestServer:/home/lx/git/testLVM# vagrant ssh
+==> default: The machine you're attempting to SSH into is configured to use
+==> default: password-based authentication. Vagrant can't script entering the
+==> default: password for you. If you're prompted for a password, please enter
+==> default: the same password you have configured in the Vagrantfile.
+root@127.0.0.1's password:
+Last login: Thu Sep 16 11:46:18 2021 from gateway
+[root@vm-gkuOA1801016 ~]# lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda             8:0    0   10G  0 disk
+├─sda1          8:1    0  500M  0 part /boot
+└─sda2          8:2    0  9,5G  0 part
+  ├─alex-root 253:0    0  8,5G  0 lvm  /
+  └─alex-swap 253:1    0    1G  0 lvm  [SWAP]
+sr0            11:0    1 1024M  0 rom
+
+-------------------------------------------------------------------------------------------------------
+3. Добавить модуль в initrd
+
+root@otssTestServer:/home/lx/git/test# vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Importing base box 'centos/7'...
+==> default: Matching MAC address for NAT networking...
+==> default: Checking if box 'centos/7' version '2004.01' is up to date...
+==> default: Setting the name of the VM: test_default_1631779683715_17083
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 22 (guest) => 2222 (host) (adapter 1)
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+    default:
+    default: Vagrant insecure key detected. Vagrant will automatically replace
+    default: this with a newly generated keypair for better security.
+    default:
+    default: Inserting generated public key within guest...
+    default: Removing insecure key from the guest if it's present...
+    default: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+    default: No guest additions were detected on the base box for this VM! Guest
+    default: additions are required for forwarded ports, shared folders, host only
+    default: networking, and more. If SSH fails on this machine, please install
+    default: the guest additions and repackage the box to continue.
+    default:
+    default: This is not an error message; everything may continue to work properly,
+    default: in which case you may ignore this message.
+==> default: Rsyncing folder: /home/lx/git/test/ => /vagrant
+root@otssTestServer:/home/lx/git/test# vagrant ssh
+[vagrant@vm-gkuOA1801016 ~]$ sudo -i
+[root@vm-gkuOA1801016 ~]# mkdir  /usr/lib/dracut/modules.d/01test
+[root@vm-gkuOA1801016 ~]# yum -y -q install nano
+Failed to set locale, defaulting to C
+warning: /var/cache/yum/x86_64/7/base/packages/nano-2.3.1-10.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY
+Public key for nano-2.3.1-10.el7.x86_64.rpm is not installed
+Importing GPG key 0xF4A80EB5:
+ Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+ Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+ Package    : centos-release-7-8.2003.0.el7.centos.x86_64 (@anaconda)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+[root@vm-gkuOA1801016 ~]# nano  /usr/lib/dracut/modules.d/01test/module-setup.sh
+[root@vm-gkuOA1801016 ~]# nano  /usr/lib/dracut/modules.d/01test/module-setup.sh
+[root@vm-gkuOA1801016 ~]# nano  /usr/lib/dracut/modules.d/01test/test.sh
+[root@vm-gkuOA1801016 ~]# chmod +x /usr/lib/dracut/modules.d/01test/*
+[root@vm-gkuOA1801016 ~]# ll /usr/lib/dracut/modules.d/01test/*
+-rwxr-xr-x. 1 root root 117 Sep 16 08:18 /usr/lib/dracut/modules.d/01test/module-setup.sh
+-rwxr-xr-x. 1 root root 251 Sep 16 08:20 /usr/lib/dracut/modules.d/01test/test.sh
+[root@vm-gkuOA1801016 ~]# mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
+/sbin/dracut: line 681: warning: setlocale: LC_MESSAGES: cannot change locale (ru_RU.UTF-8): No such file or directory
+/sbin/dracut: line 682: warning: setlocale: LC_CTYPE: cannot change locale (ru_RU.UTF-8): No such file or directory
+Executing: /sbin/dracut -f -v /boot/initramfs-3.10.0-1127.el7.x86_64.img 3.10.0-1127.el7.x86_64
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'plymouth' will not be installed, because command 'plymouthd' could not be found!
+dracut module 'plymouth' will not be installed, because command 'plymouth' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'lvm' will not be installed, because command 'lvm' could not be found!
+dracut module 'mdraid' will not be installed, because command 'mdadm' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'lvm' will not be installed, because command 'lvm' could not be found!
+dracut module 'mdraid' will not be installed, because command 'mdadm' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+*** Including module: bash ***
+*** Including module: test ***
+*** Including module: nss-softokn ***
+*** Including module: i18n ***
+*** Including module: kernel-modules ***
+Omitting driver floppy
+*** Including module: qemu ***
+*** Including module: rootfs-block ***
+*** Including module: terminfo ***
+*** Including module: udev-rules ***
+Skipping udev rule: 40-redhat-cpu-hotplug.rules
+Skipping udev rule: 91-permissions.rules
+*** Including module: biosdevname ***
+*** Including module: systemd ***
+*** Including module: usrmount ***
+*** Including module: base ***
+*** Including module: fs-lib ***
+*** Including module: shutdown ***
+*** Including modules done ***
+*** Installing kernel module dependencies and firmware ***
+*** Installing kernel module dependencies and firmware done ***
+*** Resolving executable dependencies ***
+*** Resolving executable dependencies done***
+*** Hardlinking files ***
+*** Hardlinking files done ***
+*** Stripping files ***
+*** Stripping files done ***
+*** Generating early-microcode cpio image contents ***
+*** No early-microcode cpio image needed ***
+*** Store current command line parameters ***
+*** Creating image file ***
+*** Creating image file done ***
+*** Creating initramfs image file '/boot/initramfs-3.10.0-1127.el7.x86_64.img' done ***
+[root@vm-gkuOA1801016 ~]# lsinitrd -m /boot/initramfs-3.10.0-1127.el7.x86_64.img | grep test
+test
+[root@vm-gkuOA1801016 ~]# nano /etc/default/grub
+[root@vm-gkuOA1801016 ~]# grub2-mkconfig -o /etc/grub2.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-1127.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-1127.el7.x86_64.img
+done
+[root@vm-gkuOA1801016 ~]# reboot
+Connection to 127.0.0.1 closed by remote host.
+Connection to 127.0.0.1 closed.
